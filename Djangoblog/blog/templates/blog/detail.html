@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
 
+                {% block toc %}
+                {% if post.toc %}
+                <div class="widget widget-content">
+                    <h3 class="widget-title">文章目录</h3>
+                    {{ post.toc|safe }}
+                </div>
+                {% endif %}
+                {% endblock toc %}
+
                 {% block main %}
                 <article class="post post-1">
                     <header class="entry-header">
@@ -15,8 +24,10 @@
                         </div>
                     </header>
                     <div class="entry-content clearfix">
-                        {{ post.body|safe }}
-                        {# 避免HTML代码被转义 #}
+                        {% autoescape off %}
+                        {{ post.body }}
+                        {% endautoescape %}
+                        {# 避免HTML代码被转义 也可使用filter{{ post.body|safe }} #}
                     </div>
                 </article>
                 <section class="comment-area" id="comment-area">
@@ -78,26 +89,3 @@
                     </div>
                 </section>
             {% endblock main %}
-
-                {% block toc %}
-                <div class="widget widget-content">
-                    <h3 class="widget-title">文章目录</h3>
-                    <ul>
-                        <li>
-                            <a href="#">教程特点</a>
-                        </li>
-                        <li>
-                            <a href="#">谁适合这个教程</a>
-                        </li>
-                        <li>
-                            <a href="#">在线预览</a>
-                        </li>
-                        <li>
-                            <a href="#">资源列表</a>
-                        </li>
-                        <li>
-                            <a href="#">获取帮助</a>
-                        </li>
-                    </ul>
-                </div>
-                {% endblock toc %}
