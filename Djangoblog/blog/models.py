@@ -56,6 +56,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = '文章'  # 在admin页面上显示的字段名
         verbose_name_plural = verbose_name  # 在admin页面上显示的字段名 （复数）
+        ordering = ['-created_time']  # 指定 Post 的排序方式,ordering = ['-created_time', 'title']
 
     # 自定义 get_absolute_url 方法
     # 记得从 django.urls 中导入 reverse 函数
