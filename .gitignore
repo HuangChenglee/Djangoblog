@@ -1,4 +1,4 @@
+Djangoblog/_credentials.py
 *.sqlite3
 *.pyc
 *.iml
-_credentials.py
