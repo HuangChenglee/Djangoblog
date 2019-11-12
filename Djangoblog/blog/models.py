@@ -104,7 +104,14 @@ class Post(models.Model):
     # Category 类似。
     author = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE)
 
-    #  重写save函数,使修改时间自动获值
+    post_view = models.PositiveIntegerField('阅读量', default=0, editable=False)
+    # editable参数设为False将不允许通过jango后台编辑此字段的内容
+
+    def increse_post_view(self):
+        self.post_view += 1
+        self.save(update_fields=['post_view'])
+
+    #  重写save函数,使修改时间自动获值d
     def save(self, *args, **kwargs):
         self.modified_time = timezone.now()
         # 首先实例化一个 Markdown 类，用于渲染 body 的文本。
@@ -117,6 +124,7 @@ class Post(models.Model):
         # 先将 Markdown 文本渲染成 HTML 文本
         # strip_tags 去掉 HTML 文本的全部 HTML 标签
         # 从文本摘取前 54 个字符赋给 excerpt
-        self.excerpt = strip_tags(md.convert(self.body))[:54]
+        if self.excerpt == '':
+            self.excerpt = strip_tags(md.convert(self.body))[:54]
 
         super().save(*args, **kwargs)

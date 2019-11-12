@@ -32,6 +32,7 @@ def index(request):
 
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    post.increse_post_view()  # 阅读量加一
     # post.body = mistune.markdown(post.body) mistune也可以
     # post.body = markdown.markdown(post.body, extensions=[
     #     'markdown.extensions.extra',
