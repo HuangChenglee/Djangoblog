@@ -66,19 +66,37 @@ def archive(request, year, month):
     post_list = Post.objects.filter(created_time__year=year,
                                     created_time__month=month
                                     ).order_by('-created_time')
+    # 每页显示 5 篇文章
+    paginator = Paginator(post_list, 5)
+    # 获取 url 中的页码
+    page = request.GET.get('page')
+    # 将导航对象相应的页码内容返回给 articles
+    posts = paginator.get_page(page)
     # 这里created_time是Python的date对象，其有一个year和month属性
     # Python中调用属性的方式通常是created_time.year，但是由于这里作为方法的参数列表，所以django要求我们把点替换成了两个下划线，即created_time__year
-    return render(request, 'blog/index.html', context={'post_list': post_list})
+    return render(request, 'blog/index.html', context={'post_list': posts})
 
 
 def category(request, pk):
     # 记得在开始部分导入 Category 类
     cate = get_object_or_404(Category, pk=pk)
     post_list = Post.objects.filter(category=cate).order_by('-created_time')
-    return render(request, 'blog/index.html', context={'post_list': post_list})
+    # 每页显示 5 篇文章
+    paginator = Paginator(post_list, 5)
+    # 获取 url 中的页码
+    page = request.GET.get('page')
+    # 将导航对象相应的页码内容返回给 articles
+    posts = paginator.get_page(page)
+    return render(request, 'blog/index.html', context={'post_list': posts})
 
 
 def tag(request, pk):
     t = get_object_or_404(Tag, pk=pk)
     post_list = Post.objects.filter(tags=t).order_by('-created_time')
-    return render(request, 'blog/index.html', context={'post_list': post_list})
+    # 每页显示 5 篇文章
+    paginator = Paginator(post_list, 5)
+    # 获取 url 中的页码
+    page = request.GET.get('page')
+    # 将导航对象相应的页码内容返回给 articles
+    posts = paginator.get_page(page)
+    return render(request, 'blog/index.html', context={'post_list': posts})
