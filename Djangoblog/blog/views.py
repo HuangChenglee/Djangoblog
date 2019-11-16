@@ -1,6 +1,7 @@
 import re
 
 import markdown
+from django.core.paginator import Paginator
 from markdown.extensions.toc import TocExtension
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -15,9 +16,16 @@ def index(request):
     # 这个 request 就是 django 为我们封装好的 HTTP 请求，它是类 HttpRequest 的一个实例。
     # return HttpResponse("欢迎访问我的博客首页！")
     post_list = Post.objects.all().order_by('-created_time')
+    # 每页显示 5 篇文章
+    paginator = Paginator(post_list, 5)
+    # 获取 url 中的页码
+    page = request.GET.get('page')
+    # 将导航对象相应的页码内容返回给 articles
+    posts = paginator.get_page(page)
+
     return render(request, 'blog/index.html', context={
         'title': '我的博客首页',
-        'post_list': post_list,
+        'post_list': posts,
         'welcome': '欢迎访问我的博客首页',
     })
 
